@@ -24,6 +24,7 @@
 </settings>
 
 <typeAliases>
-    <typeAlias type="com.aaron.user.model.UserVO" alias="UserVO"/>
+    <typeAlias type="com.aaron.system.user.model.User" alias="User"/>
+    <typeAlias type="com.aaron.system.menu.model.Menu" alias="Menu"/>
 </typeAliases>
 </configuration>

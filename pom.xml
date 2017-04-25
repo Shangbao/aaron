@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.aaron</groupId>
@@ -14,15 +15,19 @@
     </modules>
 
     <properties>
-        <spring.version>3.2.8.RELEASE</spring.version>
-        <mybatis.version>3.2.5</mybatis.version>
+        <spring.version>4.2.4.RELEASE</spring.version>
+        <mybatis.version>3.3.0</mybatis.version>
         <tomcat-jdbc.version>7.0.52</tomcat-jdbc.version>
         <mysql-connector-java.version>5.0.8</mysql-connector-java.version>
         <cglib.version>3.1</cglib.version>
+        <slf4j.version>1.7.7</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <shiro.version>1.2.4</shiro.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!--单元测试依赖包-->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -30,6 +35,7 @@
                 <scope>test</scope>
             </dependency>
 
+            <!--Spring Start-->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
@@ -41,56 +47,48 @@
                 <artifactId>spring-expression</artifactId>
                 <version>${spring.version}</version>
             </dependency>
-
             <!-- Bean Factory and JavaBeans utilities (depends on spring-core) Define this if you use Spring Bean APIs (org.springframework.beans.*) -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
                 <version>${spring.version}</version>
             </dependency>
-
             <!-- Aspect Oriented Programming (AOP) Framework (depends on spring-core, spring-beans) Define this if you use Spring AOP APIs (org.springframework.aop.*) -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aop</artifactId>
                 <version>${spring.version}</version>
             </dependency>
-
             <!-- Application Context (depends on spring-core, spring-expression, spring-aop, spring-beans) This is the central artifact for Spring's Dependency Injection Container and is generally always defined -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
                 <version>${spring.version}</version>
             </dependency>
-
             <!-- Various Application Context utilities, including EhCache, JavaMail, Quartz, and Freemarker integration Define this if you need any of these integrations -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context-support</artifactId>
                 <version>${spring.version}</version>
             </dependency>
-
             <!-- Transaction Management Abstraction (depends on spring-core, spring-beans, spring-aop, spring-context) Define this if you use Spring Transactions or DAO Exception Hierarchy (org.springframework.transaction.*/org.springframework.dao.*) -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
                 <version>${spring.version}</version>
             </dependency>
-
             <!-- JDBC Data Access Library (depends on spring-core, spring-beans, spring-context, spring-tx) Define this if you use Spring's JdbcTemplate API (org.springframework.jdbc.*) -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jdbc</artifactId>
                 <version>${spring.version}</version>
             </dependency>
-
             <!-- Object-to-Relation-Mapping (ORM) integration with Hibernate, JPA, and iBatis. (depends on spring-core, spring-beans, spring-context, spring-tx) Define this if you need ORM (org.springframework.orm.*) -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-orm</artifactId>
                 <version>${spring.version}</version>
             </dependency>
-
             <!-- Web application development utilities applicable to both Servlet and Portlet Environments (depends on spring-core, spring-beans, spring-context) Define this if you use Spring MVC, or wish to use Struts, JSF, or another web framework with Spring (org.springframework.web.*) -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -102,20 +100,22 @@
                 <artifactId>spring-webmvc</artifactId>
                 <version>${spring.version}</version>
             </dependency>
-
             <!--spring framework test-->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
                 <version>3.2.8.RELEASE</version>
             </dependency>
+            <!--Spring end-->
 
+            <!--DB And DAO Start-->
+            <!--mysql驱动程序jar-->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
             </dependency>
-
+            <!--mybatis相关jar-->
             <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
@@ -126,6 +126,7 @@
                 <artifactId>mybatis-spring</artifactId>
                 <version>1.2.2</version>
             </dependency>
+            <!--jdbc连接池-->
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat-jdbc</artifactId>
@@ -136,13 +137,13 @@
                 <artifactId>commons-pool</artifactId>
                 <version>1.1</version>
             </dependency>
-
             <!--mybatis 延迟加载类代理工具-->
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
                 <version>${cglib.version}</version>
             </dependency>
+            <!--DB And DAO End-->
 
             <!--JSTL-->
             <dependency>
@@ -150,7 +151,34 @@
                 <artifactId>jstl</artifactId>
                 <version>1.2</version>
             </dependency>
-            <!--json-->
+
+            <!--Log4j2 Start-->
+            <!--Log4j2配置-->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-web</artifactId>
+                <version>2.5</version>
+            </dependency>
+            <!--解决Spring使用slf4j输出日志与log4j冲突的问题-->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.13</version>
+            </dependency>
+            <!--Log4j2 End-->
+
+
+            <!--json Start-->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
@@ -161,6 +189,36 @@
                 <artifactId>jackson-module-jaxb-annotations</artifactId>
                 <version>2.3.2</version>
             </dependency>
+            <!--json End-->
+
+            <!--Shiro Start-->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <version>${shiro.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-ehcache</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <!--Shiro End-->
         </dependencies>
     </dependencyManagement>
 
@@ -173,7 +231,16 @@
                 </includes>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
-
 
 </project>
