@@ -4,9 +4,11 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <display-name>aaron</display-name>
+
+    <!--指定spring配置文件的位置-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:/applicationContext.xml</param-value>
+        <param-value>classpath*:applicationContext.xml</param-value>
     </context-param>
 
     <!--Sring环境加载监听器 负责监听加载spring上下文-->
@@ -19,15 +21,82 @@
         <servlet-name>aaron</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath*:/aaron-servlet.xml</param-value>
+        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>aaron</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-
-
+    <!--Session 过时时间-->
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
+
+    <!--字符集拦截器-->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+    <!--shiro拦截器-->
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+    <!---表单提交拦截器:防止重复提交等-->
+    <filter>
+        <filter-name>httpPutFormContentFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>httpPutFormContentFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--404-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/404.jsp</location>
+    </error-page>
+
+    <!--SQL log输出-->
+    <!--
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>classpath:/log4j.xml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>log4jRefreshInterval</param-name>
+        <param-value>60000</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+    -->
 </web-app>
