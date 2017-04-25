@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
  * Time:20:15
  */
 @Service
-public class BaseServiceImpl {
+public class BaseServiceImpl  implements BaseService{
 
 }

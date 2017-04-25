@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaron.system.user.dao.UserDao">
+    <resultMap id="userMap" type="User">
+        <id  column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="wxname" property="wxname"/>
+        <result column="password" property="password"/>
+        <result column="gender" property="gender"/>
+        <result column="user_avatar" property="userAvatar"/>
+    </resultMap>
+
+    <select id="getUserByUsername" resultMap="userMap" parameterType="java.lang.String">
+        select su.id,su.username,su.nickname,su.nickname,su.wxname,su.password,su.gender,su.user_avatar,sr.role_name,sr.id
+        from sys_user su,sys_role sr,sys_user_role sur
+        where su.id=sur.user_id and sr.id=sur.role_id AND su.username=#{username}
+    </select>
+
+    <select id="getPermTokenByUsername" resultType="java.lang.String">
+        SELECT perm_token FROM sys_user su, sys_user_role sur, sys_role_permission srp, sys_permission sp
+        WHERE su.`id`=sur.`user_id` AND sur.`role_id` = srp.`role_id` AND
+        srp.`perm_id`= sp.`id` AND su.`username`=#{username}
+    </select>
+
+
+</mapper>

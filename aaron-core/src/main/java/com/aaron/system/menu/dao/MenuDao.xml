@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aaron.system.menu.dao.MenuDao">
+
+    <resultMap id="menuMap" type="Menu">
+        <id column="id" property="id" />
+        <result column="icon" property="icon" />
+        <result column="menu_name" property="menuName" />
+        <result column="url" property="url" />
+        <result column="level" property="level" />
+        <result column="is_leaf" property="isLeaf" />
+        <result column="parent_id" property="parentId" />
+        <result column="memo" property="memo" />
+        <result column="perm_token" property="permission.permToken"/>
+    </resultMap>
+
+    <resultMap id="permissionTree" type="Menu">
+        <id column="id" property="id" />
+        <result column="menu_name" property="menuName" />
+        <result column="parent_id" property="parentId" />
+        <result column="perm_token" property="permission.permToken"/>
+        <result column="perm_id" property="permission.id"/>
+    </resultMap>
+
+    <select id="getAllMenu" resultMap="menuMap">
+        SELECT sm.*,sp.`perm_token` FROM sys_menu sm,sys_permission sp WHERE sm.`perm_id`=sp.`id`
+    </select>
+    <select id="getMenuListByLevel" resultMap="menuMap">
+        SELECT sm.*,sp.`perm_token` FROM sys_menu sm,sys_permission sp WHERE sm.`perm_id`=sp.`id` AND sm.level=#{level}
+    </select>
+
+    <select id="getMenuListByParentId" resultMap="menuMap">
+        SELECT  sm.*,sp.perm_token FROM sys_menu sm,sys_permission sp WHERE sm.perm_id =sp.id and sm.parent_id =#{parentId}
+    </select>
+
+    <select id="getPermissionTree" resultMap="permissionTree">
+        SELECT sm.menu_name,sm.id,sm.parent_id,sp.`perm_token`,sp.id as perm_id FROM sys_menu sm,sys_permission sp WHERE sm.`perm_id`=sp.`id`
+    </select>
+
+
+</mapper>

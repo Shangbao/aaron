@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aaron.system.role.dao.RoleDao">
+    <insert id="addRole">
+        INSERT INTO sys_role (role_name, role_description) VALUES (#{roleName}, #{roleDescription})
+        <selectKey keyProperty="id" resultType="string">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <insert id="addRolePermission">
+        INSERT INTO sys_role_permission (role_id,perm_id) VALUES
+        <foreach collection="permissions" item="item" index="index" separator=",">
+            (#{id},#{item.id})
+        </foreach>
+    </insert>
+    <update id="updateRole">
+        UPDATE sys_role SET role_name=#{roleName}, role_description=#{roleDescription}
+        where id=#{id}
+    </update>
+    <delete id="delRolePermissionByRoleId">
+        DELETE FROM sys_role_permission WHERE role_id=#{roleId}
+    </delete>
+    <delete id="delRoleById">
+        DELETE FROM sys_role WHERE id=#{id}
+    </delete>
+    <select id="getAllRoleList" resultType="com.aaron.system.role.model.Role">
+        SELECT id,role_name FROM sys_role
+    </select>
+
+    <select id="getRoleListPage" resultType="com.aaron.system.role.model.Role">
+        SELECT id,role_name, role_description FROM sys_role
+    </select>
+
+    <select id="getRoleById" resultMap="roleMap">
+        SELECT sr.*,sp.`id` AS perm_id,sp.`perm_token` FROM sys_role sr,sys_permission sp,sys_role_permission srp
+         WHERE sr.`id`=srp.`role_id` AND srp.`perm_id`=sp.`id`
+         AND sr.id = #{id}
+    </select>
+
+    <resultMap id="roleMap" type="com.aaron.system.role.model.Role">
+        <id column="id" property="id" />
+        <result column="role_name" property="roleName" />
+        <result column="role_description" property="roleDescription" />
+        <collection property="permissions" resultMap="permissionMap" />
+    </resultMap>
+
+    <resultMap id="permissionMap" type="com.aaron.system.permission.model.Permission">
+        <id column="perm_id" property="id" />
+        <result column="perm_token" property="permToken" />
+    </resultMap>
+</mapper>

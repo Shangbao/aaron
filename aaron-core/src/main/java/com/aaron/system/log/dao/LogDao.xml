@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aaron.system.log.dao.LogDao">
+    <insert id="insertSystemLog">
+        INSERT INTO sys_log (url, ip, username, method, params, date, user_agent) VALUES
+        (#{url},#{ip},#{username},#{method},#{params},#{date},#{userAgent})
+    </insert>
+    <select id="getSystemLogListPage" resultType="com.aaron.system.log.model.SystemLog">
+        SELECT * FROM sys_log
+    </select>
+</mapper>

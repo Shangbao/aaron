@@ -5,22 +5,19 @@
 * V1.0.1    202015/6/3       longshihui    初始版本
 *
 */
-package com.aaron.utils.annotation;
+package com.aaron.annotation;
 
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 
 /**
- * 类的描述信息
- *
- * @author aaron_yong
- * @version 1.0.1
+ * 该注解的作用跟Component、Repository一样，在配置文件里面完全用这两个注解替换。
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
 @Component
-public @interface MyBatisScan {
+public @interface RepositoryImpl {
     String value() default "";
 }
